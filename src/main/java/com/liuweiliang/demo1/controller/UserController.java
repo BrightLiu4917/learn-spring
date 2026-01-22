@@ -1,7 +1,8 @@
 package com.liuweiliang.demo1.controller;
 
+import com.liuweiliang.demo1.common.Result;
 import com.liuweiliang.demo1.entity.vo.UserVO;
-import com.liuweiliang.demo1.service.impl.UserService;
+import com.liuweiliang.demo1.service.impl.User.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -14,19 +15,21 @@ public class UserController {
     @Resource
     UserService userService;
 
+    /**
+     * 列表
+     * @return Object
+     */
     @GetMapping(value = "/list")
-    public void list() {
-        System.out.println(userService.all());
+    public Object list() {
+        return Result.success(userService.all());
     }
 
 
-    @GetMapping(value = "/show")
-    public void show(
-            @RequestParam(required = true) String id) {
-        Long userId = Long.parseLong(id);
-        System.out.println(userService.show(userId)
-
-        );
-    }
+  // java    public ResultWrapper<List<ComponentInfoDTO>> list() throws Exception {
+  @GetMapping(value = "/show")
+  public Result<List<UserVO>> show(@RequestParam String id) throws Exception {
+      List<UserVO> list = userService.show(id);
+      return Result.success(list); // 统一包装为 { code, message, data }
+  }
 
 }

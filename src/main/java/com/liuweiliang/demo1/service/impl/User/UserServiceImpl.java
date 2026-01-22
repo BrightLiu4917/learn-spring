@@ -1,11 +1,9 @@
-package com.liuweiliang.demo1.service.impl;
+package com.liuweiliang.demo1.service.impl.User;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.liuweiliang.demo1.entity.model.UserModel;
 import com.liuweiliang.demo1.entity.vo.UserVO;
 import com.liuweiliang.demo1.mapper.UserMapper;
-import com.liuweiliang.demo1.service.impl.UserService;
-import com.mysql.cj.log.Log;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +18,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserModel> implemen
     }
 
     @Override
-    public List<UserVO> show(Long id) {
+    public List<UserVO> show(String id) {
         return baseMapper.show(id);
     }
 }

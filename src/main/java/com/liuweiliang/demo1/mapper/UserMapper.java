@@ -9,6 +9,6 @@ public interface UserMapper extends BaseMapper<UserModel> {
 
     List<UserVO> all();
 
-    List<UserVO> show(Long id);
+    List<UserVO> show(String id);
 
 }

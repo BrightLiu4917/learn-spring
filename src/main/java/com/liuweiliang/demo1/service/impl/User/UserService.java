@@ -1,4 +1,4 @@
-package com.liuweiliang.demo1.service.impl;
+package com.liuweiliang.demo1.service.impl.User;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -11,6 +11,6 @@ public interface  UserService extends IService<UserModel> {
 
     List<UserVO> all();
 
-    List<UserVO> show(Long id);
+    List<UserVO> show(String id);
 
 }

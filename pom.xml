@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Spring Boot 4.0.1 父工程（适配JDK 17+） -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -12,31 +11,26 @@
         <relativePath/>
     </parent>
 
-    <!-- 项目核心信息 -->
     <groupId>com.liuweiliang</groupId>
     <artifactId>demo1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>demo1</name>
-    <description>Spring Boot 4.0.1 演示项目（集成MyBatis-Plus/MySQL/Druid/Redis/MongoDB/Elasticsearch/Swagger）</description>
+    <description>Spring Boot 演示项目（MyBatis-Plus/MySQL/Druid 等）</description>
 
-    <!-- 统一版本管理 -->
     <properties>
         <mysql.version>8.0.31</mysql.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <druid.version>1.2.20</druid.version>
+        <lombok.version>1.18.28</lombok.version>
+        <springdoc.version>2.5.0</springdoc.version>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- 插件版本 -->
-        <graphqlcodegen.version>1.61.5</graphqlcodegen.version>
-        <build-helper-maven-plugin.version>3.4.0</build-helper-maven-plugin.version>
-        <native-maven-plugin.version>0.10.2</native-maven-plugin.version>
-        <!-- 核心框架版本 -->
-        <mybatis-plus.version>3.5.5</mybatis-plus.version>
-        <druid.version>1.2.20</druid.version>
-        <!-- Swagger（SpringDoc）版本 -->
-        <springdoc.version>2.5.0</springdoc.version>
+        <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
     </properties>
 
     <dependencies>
+        <!-- Spring Boot 核心 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -45,54 +39,106 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <!-- ========== 核心基础依赖 ========== -->
-        <!-- MySQL驱动（适配8.x） -->
+
+        <!-- MySQL 驱动（指定版本） -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
         </dependency>
 
-        <!-- Druid连接池（适配yml中的druid配置） -->
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.5.22</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+
+        <!-- Druid 连接池 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
         </dependency>
 
-        <!-- MyBatis-Plus核心（解决BaseMapper导入问题） -->
+        <!-- MyBatis-Plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
 
+        <!-- 校验（建议） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
 
+        <!-- Lombok（编译时） -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-        <!-- ========== 开发效率依赖 ========== -->
+        <!-- 开发时热重载（可选） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
 
-        <!-- ========== 测试依赖 ========== -->
+        <!-- 测试依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
+            <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- 编译插件：设置 Java 版本并配置 Lombok 注解处理器 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <release>${java.version}</release>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <!-- 可选：surefire 使用 JUnit 平台（若需要） -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M8</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
             </plugin>
         </plugins>
     </build>
