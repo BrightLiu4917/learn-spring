@@ -3,12 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liuweiliang.demo1.mapper.UserMapper">
     <!-- 对应 all() 方法 -->
-    <select id="all" resultType="com.liuweiliang.demo1.entity.vo.UserVO">
+    <select id="all" resultType="com.liuweiliang.demo1.entity.model.UserModel">
         SELECT id, name FROM users
     </select>
 
     <!-- 对应 show() 方法 -->
-    <select id="show" parameterType="java.lang.String" resultType="com.liuweiliang.demo1.entity.vo.UserVO">
+    <select id="show" parameterType="java.lang.Long" resultType="com.liuweiliang.demo1.entity.model.UserModel">
         SELECT id, name FROM users WHERE id = #{id}
     </select>
 </mapper>

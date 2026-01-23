@@ -11,6 +11,6 @@ public interface  UserService extends IService<UserModel> {
 
     List<UserVO> all();
 
-    List<UserVO> show(String id);
+    List<UserVO> show(Long id);
 
 }

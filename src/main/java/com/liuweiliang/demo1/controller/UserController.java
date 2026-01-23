@@ -15,21 +15,17 @@ public class UserController {
     @Resource
     UserService userService;
 
-    /**
-     * 列表
-     * @return Object
-     */
-    @GetMapping(value = "/list")
-    public Object list() {
-        return Result.success(userService.all());
+    @GetMapping(value = "/all")
+    public Result<List<UserVO>> list() {
+        List<UserVO> list = userService.all();
+        return Result.success(list);
     }
 
 
-  // java    public ResultWrapper<List<ComponentInfoDTO>> list() throws Exception {
   @GetMapping(value = "/show")
-  public Result<List<UserVO>> show(@RequestParam String id) throws Exception {
+  public Result<List<UserVO>> show(@RequestParam Long id) throws Exception {
       List<UserVO> list = userService.show(id);
-      return Result.success(list); // 统一包装为 { code, message, data }
+      return Result.success(list);
   }
 
 }
