@@ -285,4 +285,6 @@ public class AdminModel implements Serializable {
     return this.deletedAt;
     }
 
+    public void set() {
+    }
 }

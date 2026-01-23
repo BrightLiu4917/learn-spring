@@ -33,7 +33,7 @@ public class AdminController {
 
     @PostMapping(value = "/create")
     public boolean create(@Valid @RequestBody AdminCreateRequest  request ){
-        System.out.println(request);
+
         return true;
     }
 
