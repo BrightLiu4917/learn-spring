@@ -49,7 +49,8 @@ public class AdminController {
             // @RequestParam：接收URL参数，设置默认值避免空指针
             @RequestParam(defaultValue = "20") Integer pageNum,
             @RequestParam(defaultValue = "1") Integer pageSize,
-            @RequestParam(required = false) String account // 可选：自定义筛选条件
+            @RequestParam(required = false) String account,
+            @RequestParam(required = false) String ident
 
     ) {
 

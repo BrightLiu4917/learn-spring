@@ -47,7 +47,6 @@ public class AdminModel implements Serializable {
     @Size(max= 32,message="编码长度不能超过32")
     @ApiModelProperty("真实姓名")
     @Length(max= 32,message="编码长度不能超过32")
-//    @Column(name = "real_name")
     @TableField("real_name") // 使用 @Column 注解映射到数据库的 snake_case 列名
     private String realName;
     /**

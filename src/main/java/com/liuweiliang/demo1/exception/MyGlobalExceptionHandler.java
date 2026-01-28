@@ -1,7 +1,6 @@
 package com.liuweiliang.demo1.exception;
 
 import com.liuweiliang.demo1.common.Result; // 导入你项目的统一Result类
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -26,6 +25,7 @@ public class MyGlobalExceptionHandler {
     public Result<Object> handleValidException(MethodArgumentNotValidException ex) {
         // 拼接所有字段的错误提示（多个字段报错时，用逗号分隔）
         StringJoiner errorMsg = new StringJoiner("，");
+
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             // 错误提示：字段名 + 提示信息（比如 "account：账号不能为空"）
             errorMsg.add(fieldError.getField() + "：" + fieldError.getDefaultMessage());
