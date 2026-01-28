@@ -54,11 +54,10 @@ public class AdminController {
     ) {
 
 
-
         // 调用Service分页方法
         QueryWrapper<AdminModel> wrapper = new QueryWrapper<>();
         if (account != null && !account.isEmpty()) {
-            wrapper.like("account", "%"+account+"%"); // 拼接 WHERE account LIKE '%xxx%'
+            wrapper.like("account", account); // 拼接 WHERE account LIKE '%xxx%'
         }
 
         // 2. 调用Service（传递pageNum、pageSize、wrapper）

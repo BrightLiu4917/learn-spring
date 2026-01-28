@@ -1,51 +1,56 @@
 package com.liuweiliang.demo1.exception;
 
+import com.liuweiliang.demo1.common.Result; // 导入你项目的统一Result类
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.util.StringJoiner;
 
+/**
+ * 全局异常处理器：
+ * 1. 处理@Valid + @RequestBody的参数校验异常（MethodArgumentNotValidException）
+ * 2. 处理@RequestParam(required=true)的必填异常（MissingServletRequestParameterException）
+ * 3. 兜底处理所有其他异常
+ * 4. 统一返回项目的Result格式，前端只需适配一种格式
+ */
 @RestControllerAdvice
 public class MyGlobalExceptionHandler {
 
+    // 1. 处理@Valid + @RequestBody的参数校验异常（比如POST请求的JSON参数校验）
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException ex) {
-
-        // 1. 从异常对象里拿到 BindingResult
-        BindingResult bindingResult = ex.getBindingResult();
-
-        // 2. 创建一个 Map 用来存放我们要返回给前端的数据
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("code", 400); // HTTP 状态码
-        responseMap.put("message", "请求参数校验失败"); // 总体错误信息
-
-        // 3. 创建一个列表，用来存放每一个具体的错误字段信息
-        List<Map<String, String>> errors = new ArrayList<>();
-
-        // 4. 遍历所有校验失败的字段
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            // 5. 每一个 FieldError 对象都代表一个字段的错误
-            Map<String, String> errorDetail = new HashMap<>();
-            errorDetail.put("field", fieldError.getField()); // 错误的字段名，比如 "name"
-            errorDetail.put("message", fieldError.getDefaultMessage()); // 错误信息，比如 "用户名不能为空"
-            errorDetail.put("rejectedValue", String.valueOf(fieldError.getRejectedValue())); // 用户输入的错误值
-
-            // 6. 把这个错误详情加到列表里
-            errors.add(errorDetail);
+    public Result<Object> handleValidException(MethodArgumentNotValidException ex) {
+        // 拼接所有字段的错误提示（多个字段报错时，用逗号分隔）
+        StringJoiner errorMsg = new StringJoiner("，");
+        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+            // 错误提示：字段名 + 提示信息（比如 "account：账号不能为空"）
+            errorMsg.add(fieldError.getField() + "：" + fieldError.getDefaultMessage());
         }
+        // 返回统一Result格式，code=400（参数错误）
+        return Result.fail(400, "参数校验失败：" + errorMsg.toString());
+    }
 
-        // 7. 把错误列表放到总的响应里
-        responseMap.put("errors", errors);
+    // 2. 处理@RequestParam(required=true)的必填异常（GET请求参数缺失）
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public Result<Object> handleMissingParamException(MissingServletRequestParameterException ex) {
+        // 友好提示：参数名 + "不能为空"
+        String errorMsg = ex.getParameterName() + "参数不能为空";
+        // 返回统一Result格式，code=400
+        return Result.fail(400, errorMsg);
+    }
 
-        // 8. 返回 ResponseEntity，可以设置 HTTP 状态码和响应体
-        return new ResponseEntity<>(responseMap, HttpStatus.BAD_REQUEST);
+    // 3. 兜底处理所有未定义的异常（比如空指针、SQL异常等）
+    @ExceptionHandler(Exception.class)
+    public Result<Object> handleAllException(Exception ex, HttpServletRequest request) {
+        // 生产环境：隐藏具体异常信息，只返回通用提示；开发环境可打印异常栈
+        String errorMsg = "服务器内部错误，请稍后重试";
+        // 开发环境调试用（可选）：打印异常栈
+        ex.printStackTrace();
+        // 返回统一Result格式，code=500
+        return Result.fail(500, errorMsg);
     }
 }
