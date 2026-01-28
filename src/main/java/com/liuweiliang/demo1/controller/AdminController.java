@@ -6,6 +6,7 @@ import com.liuweiliang.demo1.entity.req.AdminCreateRequest;
 import com.liuweiliang.demo1.entity.vo.AdminVO;
 import com.liuweiliang.demo1.service.impl.Admin.AdminServiceImpl;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,15 +35,15 @@ public class AdminController {
 
 
     @PostMapping(value = "/create")
-    public int create(@Valid @RequestBody AdminCreateRequest  request ){
+    public Result create(@Valid @RequestBody AdminCreateRequest  request ){
 
         AdminModel adminModel = new AdminModel();
-        adminModel.setAccount(request.getAccount());
-        adminModel.setPassword(request.getPassword());
-        adminModel.setEmail(request.getEmail());
+        BeanUtils.copyProperties(request, adminModel);
+        adminModel.setRealName(request.getRealName());
+        System.out.println(adminModel);
         int rows = adminService.createAdmin(adminModel);
         // 根据实际字段进行映
-        return rows;
+        return Result.success();
     }
 
 }

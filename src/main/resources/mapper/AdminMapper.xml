@@ -11,4 +11,29 @@
     <select id="show" parameterType="java.lang.String" resultType="com.liuweiliang.demo1.entity.vo.AdminVO">
         SELECT * FROM erp_admins WHERE id = #{id}
     </select>
+
+
+
+
+    <insert id="insert" parameterType="com.liuweiliang.demo1.entity.model.AdminModel"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO erp_admins
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <!-- 动态拼接字段名：非空才加 -->
+            <if test="account != null">account,</if>
+            <if test="email != null">email,</if>
+            <if test="password != null">password,</if>
+            <if test="realName != null">real_name,</if>
+            <if test="phone != null">phone,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <!-- 动态拼接参数值：和字段一一对应 -->
+            <if test="account != null">#{account},</if>
+            <if test="email != null">#{email},</if>
+            <if test="password != null">#{password},</if>
+            <if test="realName != null">#{realName},</if>
+            <if test="phone != null">#{phone},</if>
+        </trim>
+    </insert>
 </mapper>

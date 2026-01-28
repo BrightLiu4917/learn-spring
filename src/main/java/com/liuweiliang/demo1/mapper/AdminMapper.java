@@ -13,17 +13,5 @@ public interface AdminMapper extends BaseMapper<AdminModel> {
 
     List<AdminVO> show(String id);
 
-
-    /**
-     * 插入管理员
-     * @param admin 传入的管理员对象
-     * @return 返回影响的行数 (1表示成功)
-     */
-    @Insert("INSERT INTO erp_admins " +
-            "(account, email, password) " +
-            "VALUES " +
-            "(#{account}, #{email}, #{password})")
-
-    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insert(AdminModel admin);
 }

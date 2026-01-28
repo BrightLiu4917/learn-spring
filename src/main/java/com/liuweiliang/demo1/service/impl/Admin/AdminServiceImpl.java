@@ -25,7 +25,6 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, AdminModel> imple
 
     public int createAdmin(AdminModel admin) {
 
-        System.out.println(admin);
         int rows = baseMapper.insert(admin);
         if (rows > 0) {
             return 1;

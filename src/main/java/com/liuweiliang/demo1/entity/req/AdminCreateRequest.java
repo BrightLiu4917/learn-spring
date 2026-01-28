@@ -1,5 +1,6 @@
 package com.liuweiliang.demo1.entity.req;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,7 @@ public class AdminCreateRequest {
     @Size(max= 32,message="编码长度不能超过32")
     @ApiModelProperty("真实姓名")
     @Length(max= 32,message="编码长度不能超过32")
+    @JsonProperty("real_name") // 关键：强制 JSON 中的字段名为 "real_name"
     private String realName;
 
     /**
