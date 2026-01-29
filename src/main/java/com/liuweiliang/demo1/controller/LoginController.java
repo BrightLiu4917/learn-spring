@@ -1,8 +1,10 @@
 package com.liuweiliang.demo1.controller;
 
+import com.liuweiliang.demo1.annotation.RequirePermission;
 import com.liuweiliang.demo1.common.Result;
 import com.liuweiliang.demo1.entity.model.AdminModel;
 import com.liuweiliang.demo1.entity.req.LoginRequest;
+import com.liuweiliang.demo1.enums.PermissionEnum;
 import com.liuweiliang.demo1.service.impl.Admin.AdminServiceImpl;
 import com.liuweiliang.demo1.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,4 +64,14 @@ public class LoginController {
         Map<String, Object> userInfo = jwtUtil.parseToken(token);
         return Result.success(userInfo);
     }
+
+
+    @GetMapping("auth/delete")
+    @RequirePermission(PermissionEnum.SUPER_ADMIN) // 仅超级管理员可调用
+    public Result<Boolean> delete(@RequestParam String id)
+    {
+        adminService.removeById(id);
+        return Result.success(true);
+    }
+
 }

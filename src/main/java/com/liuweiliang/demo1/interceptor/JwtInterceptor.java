@@ -28,10 +28,15 @@ public class JwtInterceptor implements HandlerInterceptor {
         // 1. 提取请求头中的Token（前端通常将Token放在Authorization头中，格式：Bearer {Token}）
         String authorization = request.getHeader("Authorization");
         String token = null;
-        if (authorization != null && authorization.startsWith("Bearer ")) {
-            // 截取Token（去掉"Bearer "前缀）
-            token = authorization.substring(7);
+        if (authorization != null) {
+            if (authorization.startsWith("Bearer ")){
+                token = authorization.substring(7);// 截取Token（去掉"Bearer "前缀）
+            }else{
+                token = authorization.trim();
+            }
         }
+
+        System.out.println("Token：" + token);
 
         // 2. 校验Token合法性
         if (token == null || !jwtUtil.verifyToken(token)) {
