@@ -65,3 +65,10 @@ openapi:
     contact:
       name: ???
       email: your-email@example.com
+
+# JWT配置
+jwt:
+  secret:
+    key: abcdefghijklmnopqrstuvwxyz1234567890abcdef # 32位秘钥，生产环境请更换为安全随机字符串
+  expire:
+    time: 3600000 # Token过期时间：1小时（单位：毫秒）

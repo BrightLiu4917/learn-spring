@@ -22,4 +22,7 @@ public interface AdminService extends IService<AdminModel> {
     boolean createAdmin(AdminCreateRequest request);
 
     IPage<AdminVO> list(Integer pageNum, Integer pageSize, QueryWrapper<AdminModel> wrapper);
+
+
+    AdminModel getAdminByUsername(String account,String password);
 }

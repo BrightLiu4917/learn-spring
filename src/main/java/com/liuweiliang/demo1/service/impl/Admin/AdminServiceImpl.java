@@ -45,4 +45,25 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, AdminModel> imple
         return baseMapper.list(page, wrapper);
     }
 
+
+    public AdminModel getAdminByUsername(String account,String password) {
+
+        String accountTrim = account.trim();
+        String passwordTrim = password.trim();
+
+        QueryWrapper<AdminModel> queryWrapper = new QueryWrapper<AdminModel>()
+                .eq("account", accountTrim); // 硬编码字段名，风险高（字段修改会漏改）
+        AdminModel adminModel = this.getOne(queryWrapper);
+
+
+        if (adminModel == null) {
+            throw new RuntimeException("用户不存在");
+        }
+
+        if (!adminModel.getPassword().trim().equals(passwordTrim)) {
+            throw new RuntimeException("密码错误");
+        }
+        return adminModel;
+    }
+
 }
