@@ -2,6 +2,7 @@ package com.liuweiliang.demo1.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 /**
  * JWT工具类：生成、验证、解析Token
  */
+@Data
 @Component
 public class JwtUtil {
     // 1. 秘钥（生产环境：放入配置文件，加密存储，不要硬编码！）

@@ -32,17 +32,34 @@ public class LoginController {
      * @return
      */
     @PostMapping("/login")
-    public Result<String> login(
+    public Result<Map<String, Object>> login(
             @RequestBody LoginRequest request
     ) {
-        AdminModel adminModel = adminService.getAdminByUsername(request.getAccount(),request.getPassword());
-        int accountId = adminModel.getId().intValue();
-        int permCode = accountId == 1 ? 1 : 0;
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", adminModel.getId()); // 用户ID
-        claims.put("account", adminModel.getAccount()); // 用户名
-        claims.put("permCode", permCode); // 权限码（0=超级管理员，1=普通管理员）
-        String token = jwtUtil.generateToken(claims);
-        return Result.success(token);
+        try {
+            AdminModel adminModel = adminService.getAdminByUsername(request.getAccount(), request.getPassword());
+            int accountId = adminModel.getId().intValue();
+            int permCode = accountId == 1 ? 1 : 0;
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("userId", adminModel.getId()); // 用户ID
+            claims.put("account", adminModel.getAccount()); // 用户名
+            claims.put("permCode", permCode); // 权限码（0=超级管理员，1=普通管理员）
+            String token = jwtUtil.generateToken(claims);
+            Map<String, Object> result = new HashMap<>();
+            result.put("access_token", token);
+            result.put("access_token_type", "Bearer");
+            result.put("expires_in",jwtUtil.getExpireTime()/1000);
+            return Result.success(result);
+        } catch (RuntimeException e) {
+            return Result.fail(500, "用户名或密码错误");
+        }
+    }
+
+
+    @GetMapping("auth/me")
+    public  Result<Map<String, Object>> me(@RequestHeader("Authorization") String authorization)
+    {
+        String token = authorization.substring(7);
+        Map<String, Object> userInfo = jwtUtil.parseToken(token);
+        return Result.success(userInfo);
     }
 }
