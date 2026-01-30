@@ -15,15 +15,15 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-@Aspect
-@Component
+@Aspect // 声明切面  类
+@Component // 交给Spring管理
 public class PermissionAspect {
 
-    @Resource
+    @Resource// 注入JwtUtil
     private JwtUtil jwtUtil;
 
     // 拦截所有贴了@RequirePermission的方法
-    @Around("@annotation(requirePermission)")
+    @Around("@annotation(requirePermission)")// 它通过 @Aspect 注解标记为切面类，配合 @Around("@annotation(requirePermission)") 环绕通知，精准拦截所有标注了 @RequirePermission 的接口（比如超级管理员才能访问的删除 API）。
     public Object checkPermission(ProceedingJoinPoint joinPoint, RequirePermission requirePermission) throws Throwable {
         // 1. 从注解里获取枚举值（用户要求的权限）
 
