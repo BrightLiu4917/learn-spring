@@ -7,7 +7,6 @@ import com.liuweiliang.demo1.util.JwtUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -33,10 +32,8 @@ public class PermissionAspect {
 
         // 2. 获取当前登录用户的权限（模拟：从token解析，实际业务从数据库/缓存取）
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String userPermCode = request.getHeader("permCode"); // 比如传"1"（对应ADMIN）
 
         String token = request.getHeader("Authorization");
-        //System.out.println("用户权限码（请求头传入）：" + jwtUtil.parseToken(token.substring(7).trim()));
 
         Map<String, Object> authInfo = jwtUtil.parseToken(token.substring(7).trim());
 
